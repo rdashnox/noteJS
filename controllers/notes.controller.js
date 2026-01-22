@@ -1,16 +1,24 @@
-// controllers/notes.controller.js
+const Note = require('../models/Note');
 
-// TODO1: Import Note model
-
-// TODO2: Create a function to GET all notes
-// Explain: Fetch all notes from MongoDB and send as JSON
 exports.getNotes = async (req, res) => {
-  // Code here
+  try {
+    const notes = await Note.find();
+    res.json(notes);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
-// TODO3: Create a function to POST a new note
-// Explain: Get 'text' from request body, save to MongoDB, return created note
 exports.createNote = async (req, res) => {
-  // Code here
+  const note = new Note({
+    text: req.body.text,
+  });
+
+  try {
+    const newNote = await note.save();
+    res.status(201).json(newNote);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 };
 
